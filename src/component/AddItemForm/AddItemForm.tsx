@@ -1,5 +1,6 @@
+import { IconButton, TextField, Tooltip } from "@material-ui/core";
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 import React, { ChangeEvent, KeyboardEvent, useState } from "react";
-import s from './AddItemForm.module.css';
 
 type AddItemFormType = {
    onAddItem: (title: string) => void
@@ -29,13 +30,21 @@ export function AddItemForm(props: AddItemFormType) {
    }
 
    return <div>
-      <input
+      <TextField
          value={title}
          onChange={onChangeHandler}
          onKeyPress={onKeyPressHandler}
-         className={error ? s.error : ''}
+         error={!!error}
+         id="outlined-basic"
+         label="Title"
+         variant="outlined"
+         helperText={error}
       />
-      <button onClick={addItem}>+</button>
-      {error && <div className={s.error_message}>{error}</div>}
+      <IconButton color='primary' size='small' onClick={addItem}>
+         <Tooltip title="Add" aria-label="add">
+            <AddCircleIcon />
+         </Tooltip>
+      </IconButton>
+
    </div>
 }
