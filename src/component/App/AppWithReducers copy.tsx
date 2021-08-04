@@ -119,7 +119,7 @@ function AppWithReducers() {
                             if (tl.filter === 'completed') {
                                 tasksForTodolist = allTodolistTasks.filter(t => t.isDone === true);
                             }
-                            return <Grid item>
+                            return <Grid key={tl.id} item>
                                 <Paper elevation={3}>
                                     <Todolist
                                         key={tl.id}
