@@ -41,7 +41,7 @@ export const Todolist = React.memo(({
         (title: string) => { onAddTask(title, id) }, [onAddTask, id]);
 
     const removeTodolist = useCallback(
-        () => { props.removeTodolist(id) }, [props.removeTodolist])
+        () => { props.removeTodolist(id) }, [props])
 
     const onChangeTitleTodolist = useCallback(
         (newTitle: string) => { onChangeTitle(newTitle, id) }, [onChangeTitle, id])
@@ -76,9 +76,18 @@ export const Todolist = React.memo(({
             </Tooltip>
         </h3>
         <AddItemForm onAddItem={addTask} />
-        <Tasks tasks={tasks} />
-        {tasksForTodolist.map(t => <Tasks />)}
-        <div>
+        {tasksForTodolist.map(t => {
+
+            return <Tasks
+                key={t.id}
+                task={t}
+                todolistId={id}
+                onAddTask={addTask}
+                onRemoveTask={removeTodolist} 
+                onChangeStatus={props.onChangeStatus}
+                onChangeValue={props.onChangeValue}/>
+        })}
+        {/* <div>
             {tasksForTodolist.map(t => {
                 const onClickHandler = () => props.onRemoveTask(t.id, id);
                 const onChangStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
@@ -88,13 +97,21 @@ export const Todolist = React.memo(({
                 const onChangeValueHandler = (newTitle: string) => {
                     props.onChangeValue(t.id, newTitle, id)
                 }
-                return <Tasks 
-                key={id}
-                todolistId={} 
-                task={t.id}/>
+                return <div key={t.id} className={t.isDone ? s.is_done : ''}>
+                    <Checkbox color="primary" checked={t.isDone} onChange={onChangStatusHandler} />
+                    <EditableSpan
+                        value={t.title}
+                        onChange={onChangeValueHandler}
+                    />
+                    <Tooltip title="Delete">
+                        <IconButton onClick={onClickHandler}>
+                            <Delete />
+                        </IconButton>
+                    </Tooltip>
+                </div>
             })
             }
-        </div>
+        </div> */}
         <div>
             <Button variant={props.filter === 'all' ? 'outlined' : 'text'}
                 onClick={onAllClickHandler}
