@@ -2,7 +2,7 @@ import { IconButton, TextField, Tooltip } from "@material-ui/core";
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import React, { ChangeEvent, KeyboardEvent, useState } from "react";
 
-type AddItemFormType = {
+export type AddItemFormType = {
    onAddItem: (title: string) => void
 }
 

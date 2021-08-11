@@ -5,7 +5,8 @@ import s from './Todolist.module.css';
 import { EditableSpan } from '../EditableSpan/EditableSpan';
 import { Button, IconButton, Tooltip } from '@material-ui/core';
 import { Delete } from '@material-ui/icons';
-import { Tasks } from '../Tasks/Tasks';
+// import { Tasks } from '../Tasks/Tasks';
+import { TasksWithRedux } from '../Tasks/TasksWithRedux';
 
 type TodolistType = {
     id: string
@@ -17,7 +18,7 @@ type TodolistType = {
     onChangeStatus: (id: string, isDone: boolean, todolistId: string) => void
     onChangeValue: (id: string, newTitle: string, todolistId: string) => void
     filter: FilterTodolistType
-    removeTodolist: (id: string) => void
+    onRemoveTodolist: (id: string) => void
     onChangeTitle: (newTitle: string, todolistId: string) => void
 }
 
@@ -34,6 +35,7 @@ export const Todolist = React.memo(({
     onAddTask,
     onChangeTitle,
     onChangeFilter,
+    onRemoveTodolist,
     ...props }: TodolistType) => {
     console.log('Todolist call');
 
@@ -41,7 +43,7 @@ export const Todolist = React.memo(({
         (title: string) => { onAddTask(title, id) }, [onAddTask, id]);
 
     const removeTodolist = useCallback(
-        () => { props.removeTodolist(id) }, [props])
+        () => { onRemoveTodolist(id) }, [onRemoveTodolist, id])
 
     const onChangeTitleTodolist = useCallback(
         (newTitle: string) => { onChangeTitle(newTitle, id) }, [onChangeTitle, id])
@@ -78,14 +80,11 @@ export const Todolist = React.memo(({
         <AddItemForm onAddItem={addTask} />
         {tasksForTodolist.map(t => {
 
-            return <Tasks
+            return <TasksWithRedux
                 key={t.id}
                 task={t}
                 todolistId={id}
-                onAddTask={addTask}
-                onRemoveTask={removeTodolist} 
-                onChangeStatus={props.onChangeStatus}
-                onChangeValue={props.onChangeValue}/>
+               />
         })}
         {/* <div>
             {tasksForTodolist.map(t => {

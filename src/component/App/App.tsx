@@ -145,7 +145,7 @@ function App() {
                                         onChangeStatus={changeStatus}
                                         onChangeValue={changeTaskTitle}
                                         filter={tl.filter}
-                                        removeTodolist={removeTodolist}
+                                        onRemoveTodolist={removeTodolist}
                                         onChangeTitle={changeTitleTodolist}
                                     />
                                 </Paper>

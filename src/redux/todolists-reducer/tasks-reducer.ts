@@ -6,7 +6,6 @@ export type RemoveTaskAT = {
    type: 'REMOVE-TASK'
    taskId: string
    todolistId: string
-
 }
 
 export type AddTaskAT = {
