@@ -1,5 +1,5 @@
 import { TextField } from "@material-ui/core";
-import React, { ChangeEvent, useCallback, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 
 
 type EditableSpanType = {
@@ -14,20 +14,14 @@ export const EditableSpan = React.memo(
       let [editMode, setEditMode] = useState(false);
       let [title, setTitle] = useState("");
 
-      const activeteAditMode = useCallback(
-         () => {
+      const activeteAditMode = () => {
             setEditMode(true);
             setTitle(props.value);
-         },
-         [],
-      )
-      const activateViewMode = useCallback(
-         () => {
+         }
+      const activateViewMode = () => {
             setEditMode(false);
             props.onChange(title);
-         },
-         [],
-      )
+      }
       const onChangeValueHandler = (e: ChangeEvent<HTMLInputElement>) => setTitle(e.currentTarget.value);
 
 
