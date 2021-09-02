@@ -29,7 +29,7 @@ function AppWithRedux() {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(fetchTodolistThunk)
+        dispatch(fetchTodolistThunk())
     }, [dispatch]);
 
     const addTask = useCallback(
