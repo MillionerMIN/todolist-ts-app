@@ -1,3 +1,9 @@
+.textField {
+   justify-content: center;
+   align-items: center;
+   display: flex;
+}
+
 .error {
    border: 1px solid red;
 }

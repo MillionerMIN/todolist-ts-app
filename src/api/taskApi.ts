@@ -1,6 +1,6 @@
 import { instance } from "./api"
 
-export type TaskType={
+export type TaskType = {
    id: string
    todoListId: string
    title: string
@@ -8,7 +8,7 @@ export type TaskType={
    completed: boolean
    status: number
    priority: number
-   startDate: null|string
+   startDate: null | string
    deadline: null | string
    order: number
    addedDate: string
@@ -21,10 +21,17 @@ export enum TaskStatuses {
    Draft = 3
 }
 
+export enum TaskPriorities {
+   Low = 0,
+   InProgress = 1,
+   Completed = 2,
+   Draft = 3
+}
+
 type CommplitTasksType<T> = {
    data: T
    resultCode: number
-   messages: number
+   messages: string[]
 }
 
 type GetTasksRespons = {
@@ -34,26 +41,26 @@ type GetTasksRespons = {
 }
 
 export type UpdateTaskModelType = {
-   title: string
-   description: string
-   completed: boolean
-   status: number
-   priority: number
-   startDate: string | null
-   deadline: string | null
+   title?: string
+   description?: string
+   completed?: boolean
+   status?: number
+   priority?: number
+   startDate?: string | null
+   deadline?: string | null
 }
 
 export const tasksApi = {
-   getTasks(todolistId: string){
+   getTasks(todolistId: string) {
       return instance.get<GetTasksRespons>(`todo-lists/${todolistId}/tasks`)
    },
    creatTasks(todolistId: string, title: string) {
-      return instance.post<CommplitTasksType<{ item: TaskType}>>(`todo-lists/${todolistId}/tasks`, {title})
+      return instance.post<CommplitTasksType<{ item: TaskType }>>(`todo-lists/${todolistId}/tasks`, { title })
    },
    updateTasks(todolistId: string, taskId: string, model: UpdateTaskModelType) {
-      return instance.put<CommplitTasksType<TaskType>>(`todo-lists/${todolistId}/tasks/${taskId}`, { ...model})
+      return instance.put<CommplitTasksType<TaskType>>(`todo-lists/${todolistId}/tasks/${taskId}`, { ...model })
    },
-   deleteTasks(todolistId: string, taskId: string){
+   deleteTasks(todolistId: string, taskId: string) {
       return instance.delete<CommplitTasksType<{}>>(`todo-lists/${todolistId}/tasks/${taskId}`)
    }
 }

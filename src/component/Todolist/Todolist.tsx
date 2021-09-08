@@ -9,6 +9,7 @@ import { useDispatch } from 'react-redux';
 import { fetchTasksThunk } from '../../redux/todolists-reducer/tasks-reducer';
 import { TaskStatuses, TaskType } from '../../api/taskApi';
 import { FilterTodolistType } from '../../redux/todolists-reducer/todolists-reducer';
+import { RequestStatusType } from '../../redux/app-reducer';
 
 type TodolistType = {
     id: string
@@ -20,22 +21,24 @@ type TodolistType = {
     changeTaskStatus: (id: string, status: TaskStatuses, todolistId: string) => void
     changeTitleTask: (id: string, newTitle: string, todolistId: string) => void
     filter: FilterTodolistType
+    entityStatus: RequestStatusType
     removeTodolist: (id: string) => void
     changeTitleTodolist: (newTitle: string, todolistId: string) => void
 }
 
-export const Todolist = React.memo(({
-    id,
-    title,
-    tasks,
-    addTask,
-    changeTitleTodolist,
-    changeFilter,
-    removeTodolist,
-    removeTask,
-    changeTaskStatus,
-    changeTitleTask,
-    ...props }: TodolistType) => {
+export const Todolist = React.memo((props: TodolistType) => {
+
+    const { id,
+        title,
+        tasks,
+        addTask,
+        changeTitleTodolist,
+        changeFilter,
+        removeTodolist,
+        removeTask,
+        changeTaskStatus,
+        changeTitleTask,
+        entityStatus, } = props
 
     const dispatch = useDispatch()
 
@@ -82,12 +85,12 @@ export const Todolist = React.memo(({
                 value={title}
                 onChange={onChangeTitleTodolist} />
             <Tooltip title="Delete">
-                <IconButton onClick={onRemoveTodolist}>
+                <IconButton onClick={onRemoveTodolist} disabled={entityStatus === 'loading'}>
                     <Delete />
                 </IconButton>
             </Tooltip>
         </h3>
-        <AddItemForm addItem={onAddTask} />
+        <AddItemForm addItem={onAddTask} entityStatus={entityStatus} />
         <div>
             {tasksForTodolist.map(t => <TasksWithRedux key={t.id} task={t} todolistId={id}
                 onRemoveTask={removeTask}

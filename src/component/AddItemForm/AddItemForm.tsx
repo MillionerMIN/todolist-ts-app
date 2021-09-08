@@ -1,14 +1,17 @@
 import { IconButton, TextField, Tooltip } from "@material-ui/core";
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import React, { ChangeEvent, KeyboardEvent, useState } from "react";
+import { RequestStatusType } from '../../redux/app-reducer';
+import s from './AddItemForm.module.css';
 
 export type AddItemFormType = {
    addItem: (title: string) => void
+   entityStatus?: RequestStatusType
 }
 
 export const AddItemForm = React.memo((props: AddItemFormType) => {
    console.log('AddItemForm call');
-   const { addItem } = props
+   const { addItem, entityStatus } = props
 
    let [title, setTitle] = useState('');
    let [error, setError] = useState<string | null>(null);
@@ -33,7 +36,7 @@ export const AddItemForm = React.memo((props: AddItemFormType) => {
       }
    }
 
-   return <div>
+   return <div className={s.textField}>
       <TextField
          value={title}
          onChange={onChangeHandler}
@@ -43,8 +46,9 @@ export const AddItemForm = React.memo((props: AddItemFormType) => {
          label="Title"
          variant="outlined"
          helperText={error}
+         disabled={entityStatus === 'loading'}
       />
-      <IconButton color='primary' size='small' onClick={onAddItem}>
+      <IconButton color='primary' size='small' onClick={onAddItem} disabled={entityStatus === 'loading'}>
          <Tooltip title="Add" aria-label="add">
             <AddCircleIcon />
          </Tooltip>

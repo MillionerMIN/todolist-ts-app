@@ -4,6 +4,7 @@ import { Todolist } from '../Todolist/Todolist';
 import { AddItemForm } from '../AddItemForm/AddItemForm';
 import { AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import {
     addTodolistThunk,
     changeTodolistFilterAC,
@@ -17,6 +18,8 @@ import { addTaskThunk, removeTaskThunk, changeTaskStatusThunk, changeTaskTitleTh
 import { useDispatch, useSelector } from 'react-redux';
 import { AppRootStateType } from '../../redux/store';
 import { TaskStatuses, TaskType } from '../../api/taskApi';
+import { RequestStatusType } from '../../redux/app-reducer';
+import { ErrorSnackbars } from '../ErrorSnackbar/ErrorSnackbar';
 
 export type TasksStateType = {
     [key: string]: Array<TaskType>
@@ -26,6 +29,7 @@ function AppWithRedux() {
 
     const todolists = useSelector<AppRootStateType, TodolistDomainType[]>(state => state.todolists)
     const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
+    const status = useSelector<AppRootStateType, RequestStatusType>(state => state.app.status)
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -55,8 +59,8 @@ function AppWithRedux() {
     }, [dispatch])
 
     const addTodolist = useCallback((title: string) => {
-            dispatch(addTodolistThunk(title))
-        }, [dispatch])
+        dispatch(addTodolistThunk(title))
+    }, [dispatch])
 
     const changeFilter = useCallback((value: FilterTodolistType, todolistId: string) => {
         const action = changeTodolistFilterAC(value, todolistId)
@@ -69,6 +73,7 @@ function AppWithRedux() {
 
     return (
         <div className={s.app}>
+            <ErrorSnackbars />
             <AppBar position="static">
                 <Toolbar>
                     <IconButton edge="start" color="inherit" aria-label="menu">
@@ -79,10 +84,11 @@ function AppWithRedux() {
                     </Typography>
                     <Button color="inherit">Login</Button>
                 </Toolbar>
+                {status === 'loading' && <LinearProgress />}
             </AppBar>
             <Container fixed>
                 <Grid container style={{ padding: '20px' }}>
-                    <AddItemForm addItem={addTodolist} />
+                    <AddItemForm addItem={addTodolist} entityStatus={status}/>
                 </Grid>
                 <Grid container spacing={3}>
                     {
@@ -94,6 +100,7 @@ function AppWithRedux() {
                                         key={tl.id}
                                         id={tl.id}
                                         title={tl.title}
+                                        entityStatus={tl.entityStatus}
                                         addTask={addTask}
                                         tasks={tasks[tl.id]}
                                         removeTask={removeTask}
